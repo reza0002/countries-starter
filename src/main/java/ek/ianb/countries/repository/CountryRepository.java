@@ -10,12 +10,6 @@ import java.util.List;
 
 @Repository
 public class CountryRepository {
-//    @Value("${spring.datasource.url}")
-//    private String dbUrl;
-//    @Value("${spring.datasource.username}")
-//    private String username;
-//    @Value("${spring.datasource.password}")
-//    private String password;
 
     private final JdbcTemplate jdbcTemplate;
 
@@ -25,7 +19,9 @@ public class CountryRepository {
 
     public List<Country> findAll() {
         String sql = "SELECT id, name FROM countries";
-        return jdbcTemplate.query(sql, new CountryRowMapper());
+        return jdbcTemplate.query(sql, (rs, rowNum) ->
+                new Country(rs.getInt("id"), rs.getString("name"))
+        );
     }
 }
 
